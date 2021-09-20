@@ -1,0 +1,6 @@
+{
+    "name": "vendor_name/htmlopdf",
+    "require": {
+      "phpmailer/phpmailer": "^6.5.1"
+    }
+  }
