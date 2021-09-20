@@ -1,5 +1,8 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+require '../vendor/autoload.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +25,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 </body>
 </html>
 <?php
-require '../vendor/autoload.php';
 if (isset($_POST['email'])) {
 
     $email = $_POST['email'];
@@ -45,9 +47,16 @@ if (isset($_POST['email'])) {
     $mail->msgHTML($klacht);
     $mail->addAddress($email);
     $mail->AddCC("info@koenwonders.nl");
+
+// create a log channel
+$log = new Logger('name');
+$log->pushHandler(new StreamHandler('info.log', Logger::WARNING));
     if (!$mail->send()) {
-        echo "mailer Error: " . $mail->ErrorInfo;
+        $log->error("mailer Error: " . $mail->ErrorInfo);
     } else {
-        echo "Mail is gestuurd!";
+        $log->warning($email .
+        $naam .
+        $onderwerp .
+        $klacht);
     }
 } ?>
